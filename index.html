@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A techy, animated portfolio generated from your resume, LinkedIn and GitHub." />
+  <meta name="theme-color" content="#0a0a0f" />
+  <title>// PORTFOLIO_GEN</title>
+
+  <!-- Google Fonts: Orbitron (display), Space Mono, DM Sans (body), JetBrains Mono (code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/animations.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <link rel="stylesheet" href="styles/responsive.css" />
+</head>
+<body>
+  <!-- Animated background layers -->
+  <canvas id="bg-particles" aria-hidden="true"></canvas>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb--cyan"></span>
+    <span class="orb orb--violet"></span>
+    <span class="orb orb--blue"></span>
+  </div>
+
+  <!-- ============================== HEADER ============================== -->
+  <header class="site-header reveal-down" id="site-header">
+    <div class="brand">
+      <span class="brand__glyph">&#10022;</span>
+      <span class="brand__name">PORTFOLIO<span class="brand__accent">_GEN</span></span>
+    </div>
+    <nav class="site-nav" id="site-nav" hidden>
+      <a href="#hero" data-nav>Home</a>
+      <a href="#about" data-nav>About</a>
+      <a href="#skills" data-nav>Skills</a>
+      <a href="#experience" data-nav>Work</a>
+      <a href="#growth" data-nav>Growth</a>
+      <a href="#intel" data-nav>Insights</a>
+      <a href="#projects" data-nav>Projects</a>
+      <a href="#repos" data-nav>Repos</a>
+    </nav>
+
+    <div class="header-actions">
+      <div class="theme-ctl">
+        <button class="theme-toggle" id="theme-toggle" type="button" title="Toggle light / dark" aria-label="Toggle light or dark theme">
+          <span id="theme-toggle-icon" aria-hidden="true">&#9789;</span>
+        </button>
+        <div class="accent-swatches" id="accent-swatches" role="group" aria-label="Accent color">
+          <button class="swatch is-active" type="button" title="Cyan / Violet" aria-label="Cyan and violet"
+            data-c1="#00f5ff" data-c2="#a855f7" data-rgb1="0, 245, 255" data-rgb2="168, 85, 247"
+            style="--s1:#00f5ff;--s2:#a855f7"></button>
+          <button class="swatch" type="button" title="Lime / Emerald" aria-label="Lime and emerald"
+            data-c1="#a3e635" data-c2="#10b981" data-rgb1="163, 230, 53" data-rgb2="16, 185, 129"
+            style="--s1:#a3e635;--s2:#10b981"></button>
+          <button class="swatch" type="button" title="Pink / Amber" aria-label="Pink and amber"
+            data-c1="#f472b6" data-c2="#fb923c" data-rgb1="244, 114, 182" data-rgb2="251, 146, 60"
+            style="--s1:#f472b6;--s2:#fb923c"></button>
+          <button class="swatch" type="button" title="Sky / Indigo" aria-label="Sky and indigo"
+            data-c1="#38bdf8" data-c2="#6366f1" data-rgb1="56, 189, 248" data-rgb2="99, 102, 241"
+            style="--s1:#38bdf8;--s2:#6366f1"></button>
+        </div>
+      </div>
+      <button class="btn-ghost" id="edit-btn" type="button" hidden>&#9998; Edit</button>
+      <button class="btn-ghost" id="share-btn" type="button" hidden>&#8599; Share</button>
+      <button class="btn-ghost" id="reset-btn" type="button" hidden>&#8635; New</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ====================== 1. INPUT / UPLOAD ZONE ====================== -->
+    <section class="intake" id="intake" aria-label="Build your profile">
+      <div class="intake__inner">
+        <p class="kicker reveal-down" style="--d: 60ms">[ INITIALIZE ]</p>
+        <h1 class="intake__title reveal-down" style="--d: 120ms">
+          Generate a <span class="grad-text">stunning portfolio</span><br />from your data.
+        </h1>
+        <p class="intake__subtitle reveal-down" style="--d: 200ms">
+          Drop a resume, paste your LinkedIn, or just give us a GitHub handle.
+          Everything is parsed right here in your browser &mdash; nothing leaves your machine.
+        </p>
+
+        <form id="intake-form" class="intake__form reveal-up" style="--d: 300ms" novalidate>
+          <!-- Resume drop zone -->
+          <label
+            class="dropzone"
+            id="dropzone"
+            for="resume-input"
+            tabindex="0"
+            role="button"
+            aria-label="Upload resume, PDF or DOCX"
+          >
+            <input
+              type="file"
+              id="resume-input"
+              accept=".pdf,.doc,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              hidden
+            />
+            <span class="dropzone__icon" aria-hidden="true">&#8682;</span>
+            <span class="dropzone__title">Drop your resume here</span>
+            <span class="dropzone__hint">PDF or DOCX &mdash; parsed locally</span>
+            <span class="dropzone__file" id="dropzone-file" hidden></span>
+          </label>
+
+          <!-- Text inputs -->
+          <div class="field">
+            <span class="field__tag">[ GITHUB ]</span>
+            <div class="field__control">
+              <span class="field__prefix">@</span>
+              <input
+                type="text"
+                id="github-input"
+                name="github"
+                placeholder="github-username"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field__tag">[ LINKEDIN ]</span>
+            <div class="field__control field__control--stack">
+              <input
+                type="url"
+                id="linkedin-url"
+                name="linkedin-url"
+                placeholder="https://linkedin.com/in/your-handle (optional)"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <textarea
+                id="linkedin-text"
+                name="linkedin-text"
+                rows="3"
+                placeholder="Optional: paste your LinkedIn About / Experience text here for richer parsing."
+                spellcheck="false"
+              ></textarea>
+            </div>
+          </div>
+
+          <p class="intake__error" id="intake-error" role="alert" hidden></p>
+
+          <button type="submit" class="cta" id="generate-btn">
+            <span class="cta__label">Generate Profile</span>
+            <span class="cta__arrow" aria-hidden="true">&rarr;</span>
+          </button>
+
+          <p class="intake__note" id="intake-note">At least one input required. Demo mode available below.</p>
+          <button type="button" class="btn-link" id="demo-btn">&#9889; Load a demo profile</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ====================== LOADING TERMINAL ====================== -->
+    <section class="loader" id="loader" hidden aria-live="polite">
+      <div class="terminal">
+        <div class="terminal__bar">
+          <span class="dot dot--red"></span>
+          <span class="dot dot--amber"></span>
+          <span class="dot dot--green"></span>
+          <span class="terminal__title">build_profile.sh</span>
+        </div>
+        <pre class="terminal__body" id="terminal-body"></pre>
+      </div>
+    </section>
+
+    <!-- ====================== EDIT / REVIEW PANEL ====================== -->
+    <section class="editor" id="editor" hidden aria-label="Review and edit your profile">
+      <div class="editor__inner">
+        <p class="kicker">[ REVIEW ]</p>
+        <h2 class="editor__title">Fine-tune your <span class="grad-text">profile</span></h2>
+        <p class="editor__hint">
+          Resume parsing is a best-effort guess &mdash; correct anything below, then reveal.
+        </p>
+        <div class="editor__body" id="editor-body"><!-- built by editor.js --></div>
+        <div class="editor__actions">
+          <button class="btn-ghost" id="editor-cancel" type="button">&larr; Back</button>
+          <button class="cta" id="editor-confirm" type="button">
+            <span class="cta__label">Reveal Profile</span>
+            <span class="cta__arrow" aria-hidden="true">&rarr;</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== RENDERED PROFILE ====================== -->
+    <div class="profile" id="profile" hidden>
+      <!-- 2. Hero -->
+      <section class="section hero" id="hero" data-reveal>
+        <div class="hero__bg" aria-hidden="true"></div>
+        <div class="hero__inner">
+          <div class="hero__avatar-wrap reveal-pop">
+            <div class="hero__avatar" id="hero-avatar"></div>
+            <span class="hero__avatar-ring" aria-hidden="true"></span>
+          </div>
+          <h1 class="hero__name grad-text" id="hero-name">Your Name</h1>
+          <p class="hero__title">
+            <span id="hero-headline">Your headline</span><span class="cursor" aria-hidden="true"></span>
+          </p>
+          <div class="hero__meta" id="hero-meta"></div>
+        </div>
+      </section>
+
+      <!-- 3. About -->
+      <section class="section" id="about" data-reveal hidden>
+        <span class="section__tag">[ ABOUT ]</span>
+        <div class="glass-card about-card">
+          <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+          <p class="about-card__text" id="about-text"></p>
+        </div>
+      </section>
+
+      <!-- 4. Skills -->
+      <section class="section" id="skills" data-reveal hidden>
+        <span class="section__tag">[ SKILLS ]</span>
+        <h2 class="section__title">Stack &amp; Tooling</h2>
+        <div class="skills" id="skills-groups"></div>
+      </section>
+
+      <!-- 5. Experience -->
+      <section class="section" id="experience" data-reveal hidden>
+        <span class="section__tag">[ EXPERIENCE ]</span>
+        <h2 class="section__title">Where I&rsquo;ve worked</h2>
+        <div class="timeline" id="timeline"></div>
+      </section>
+
+      <!-- 5b. Career growth charts -->
+      <section class="section" id="growth" data-reveal hidden>
+        <span class="section__tag">[ GROWTH ]</span>
+        <h2 class="section__title">Career Trajectory</h2>
+        <div class="growth-stats" id="growth-stats"></div>
+        <div class="growth-charts">
+          <figure class="growth-chart" id="growth-exp"></figure>
+          <figure class="growth-chart" id="growth-skills"></figure>
+        </div>
+      </section>
+
+      <!-- 5c. AI Skill Intelligence -->
+      <section class="section" id="intel" data-reveal hidden>
+        <span class="section__tag">[ AI ANALYSIS ]</span>
+        <h2 class="section__title">Skill Intelligence</h2>
+        <div class="intel-score" id="intel-score"></div>
+        <div class="intel-grid">
+          <figure class="glass-card intel-card" id="intel-radar"></figure>
+          <figure class="glass-card intel-card" id="intel-progress"></figure>
+        </div>
+        <div class="glass-card intel-card intel-topskills">
+          <h3 class="intel-card__title">Top Skills Detected</h3>
+          <div class="intel-chips" id="intel-topskills"></div>
+        </div>
+        <div class="intel-split">
+          <div class="glass-card intel-card">
+            <h3 class="intel-card__title">Missing Keywords</h3>
+            <ul class="intel-list intel-list--violet" id="intel-missing"></ul>
+          </div>
+          <div class="glass-card intel-card">
+            <h3 class="intel-card__title">Suggested Improvements</h3>
+            <ul class="intel-list" id="intel-suggest"></ul>
+          </div>
+        </div>
+        <p class="intel-note">Generated by an LLM (Groq · Llama 3.3). Estimates, not gospel — tweak in Edit.</p>
+      </section>
+
+      <!-- 6. Projects -->
+      <section class="section" id="projects" data-reveal hidden>
+        <span class="section__tag">[ PROJECTS ]</span>
+        <h2 class="section__title">Selected Projects</h2>
+        <div class="card-grid" id="projects-grid"></div>
+      </section>
+
+      <!-- 7. GitHub Stats -->
+      <section class="section" id="repos" data-reveal hidden>
+        <span class="section__tag">[ REPOSITORIES ]</span>
+        <h2 class="section__title">Open Source &amp; Code</h2>
+        <div class="gh-stats" id="gh-stats"></div>
+        <div class="gh-langs" id="gh-langs"></div>
+        <div class="gh-activity" id="gh-activity"></div>
+        <div class="repo-grid" id="repo-grid"></div>
+      </section>
+
+      <!-- 7. Education -->
+      <section class="section" id="education" data-reveal hidden>
+        <span class="section__tag">[ EDUCATION ]</span>
+        <h2 class="section__title">Education</h2>
+        <div class="card-grid" id="education-grid"></div>
+      </section>
+
+      <!-- 8. Certifications -->
+      <section class="section" id="certs" data-reveal hidden>
+        <span class="section__tag">[ CERTIFICATIONS ]</span>
+        <h2 class="section__title">Certifications &amp; Awards</h2>
+        <div class="badge-grid" id="certs-grid"></div>
+      </section>
+
+      <!-- Footer + actions -->
+      <footer class="profile-footer" data-reveal>
+        <button class="cta cta--ghost" id="download-btn" type="button">
+          <span class="cta__label">Download as PDF</span>
+          <span class="cta__arrow" aria-hidden="true">&darr;</span>
+        </button>
+        <p class="footer-note">Built with &#10022; and too much caffeine</p>
+      </footer>
+    </div>
+  </main>
+
+  <!-- Copy-to-clipboard toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+    <span class="toast__check" aria-hidden="true">&#10003;</span>
+    <span id="toast-text">Copied</span>
+  </div>
+
+  <!-- ============================== LIBRARIES ============================== -->
+  <!-- PDF.js (Mozilla) for client-side PDF parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- mammoth.js for DOCX parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+  <!-- ============================== APP SCRIPTS ============================== -->
+  <script src="scripts/parser-resume.js"></script>
+  <script src="scripts/parser-github.js"></script>
+  <script src="scripts/parser-linkedin.js"></script>
+  <script src="scripts/analytics.js"></script>
+  <script src="scripts/ai.js"></script>
+  <script src="scripts/renderer.js"></script>
+  <script src="scripts/animations.js"></script>
+  <script src="scripts/state.js"></script>
+  <script src="scripts/editor.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>

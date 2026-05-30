@@ -1,0 +1,112 @@
+/* =====================================================================
+   responsive.css — breakpoints
+   Mobile  : < 768px  (single column, stacked)
+   Tablet  : 768–1024 (2-col grids)
+   Desktop : > 1024   (3-col repos / wide timeline)
+   ===================================================================== */
+
+/* ---------- Tablet ---------- */
+@media (min-width: 768px) {
+  .gh-stats {
+    gap: 1.1rem;
+  }
+  .repo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card-grid,
+  .badge-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 1024px) {
+  .repo-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .badge-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .timeline {
+    padding-left: 2.5rem;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 767px) {
+  body {
+    font-size: 15px;
+  }
+  .site-nav {
+    display: none;
+  }
+  .gh-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .growth-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .growth-stat--wide {
+    grid-column: 1 / -1;
+  }
+  .growth-charts {
+    grid-template-columns: 1fr;
+  }
+  .intel-score {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .intel-grid,
+  .intel-split {
+    grid-template-columns: 1fr;
+  }
+  .repo-grid,
+  .card-grid,
+  .badge-grid {
+    grid-template-columns: 1fr;
+  }
+  .timeline-item__dates {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+  .orb {
+    filter: blur(70px);
+    opacity: 0.3;
+  }
+  .section {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+  /* Editor: stack the role/company/dates grid */
+  .ed-row__grid {
+    grid-template-columns: 1fr;
+  }
+  /* Header: let the brand + actions wrap, drop the accent swatches */
+  .site-header {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .accent-swatches {
+    display: none;
+  }
+  .editor__actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .editor__actions .cta {
+    width: 100%;
+  }
+}
+
+/* ---------- Small phones ---------- */
+@media (max-width: 420px) {
+  .hero__avatar-wrap {
+    width: 108px;
+    height: 108px;
+  }
+  .cta {
+    width: 100%;
+  }
+  .dropzone {
+    padding: 1.8rem 1rem;
+  }
+}

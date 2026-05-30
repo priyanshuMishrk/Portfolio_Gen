@@ -1,0 +1,15 @@
+# dependencies
+node_modules/
+server/node_modules/
+
+# secrets
+server/.env
+.env
+
+# uploads (temp resume files)
+server/uploads/*
+!server/uploads/.gitkeep
+
+# os / editor
+.DS_Store
+*.log
