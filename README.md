@@ -203,6 +203,6 @@ server/
 
 <div align="center">
 
-*Built with `✦` and too much caffeine.*
+*Built with too much caffeine.*
 
 </div>
